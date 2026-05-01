@@ -3,14 +3,47 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import ragImage from '../assets/images/Rag.png';
 import PixelBlast from './PixelBlast';
+import ScrollStack, { ScrollStackItem } from './ScrollStack';
+import bgVideo from '../assets/videos/Typing Code - 4K Video - Free Stock Video.mp4';
 
 gsap.registerPlugin(ScrollTrigger);
+
+const EXPERTISE_CARDS = [
+  {
+    title: "01. UI / UX Design",
+    description: "I design modern interfaces that are intuitive and highly engaging. Every layout is crafted for premium aesthetics and flawless usability.",
+    tools: ["Figma", "Adobe XD", "Sketch", "Photoshop"]
+  },
+  {
+    title: "02. Frontend Developer",
+    description: "I build responsive, high-performance web applications with cinematic motion and cutting-edge 3D interactions.",
+    tools: ["React", "JavaScript", "TypeScript", "Vite", "GSAP", "Three.js", "Framer Motion", "WebGL", "Redux", "GraphQL"]
+  },
+  {
+    title: "03. Backend Developer",
+    description: "I develop robust, scalable server architectures and seamless APIs that power dynamic web experiences.",
+    tools: ["Node", "Express", "REST", "JWT", "MongoDB", "Redis", "PostgreSQL", "Langchain"]
+  },
+  {
+    title: "04. DevOps",
+    description: "I streamline development lifecycles with automated testing, continuous integration, and rock-solid deployment pipelines.",
+    tools: ["Git", "GitHub", "CI/CD", "Docker", "AWS", "Jira"]
+  },
+  {
+    title: "05. Payment Systems",
+    description: "I integrate secure, frictionless payment gateways ensuring smooth financial transactions for users worldwide.",
+    tools: ["Razorpay", "Stripe", "Skrill"]
+  }
+];
 
 export default function HeroAndExpertise() {
   const containerRef = useRef(null);
   const heroCardPlaceholder = useRef(null);
   const expertiseCardPlaceholder = useRef(null);
   const flippingCard = useRef(null);
+  const videoRef = useRef(null);
+  const thumbnailRef = useRef(null);
+  const videoPlayingRef = useRef(false);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -55,8 +88,32 @@ export default function HeroAndExpertise() {
             id: 'flipTrigger',
             trigger: expertiseCardPlaceholder.current,
             start: "top bottom", // Animation starts when the destination enters the bottom of the screen
-            end: "center center", // Animation finishes when the destination is centered
+            end: "top 15vh", // Animation finishes exactly when the destination hits its sticky point
             scrub: true,
+            onUpdate: (self) => {
+              if (self.progress === 1) {
+                // Card has settled
+                if (!videoPlayingRef.current) {
+                  videoPlayingRef.current = true;
+                  if (videoRef.current) {
+                    const playPromise = videoRef.current.play();
+                    if (playPromise !== undefined) {
+                      playPromise.catch(e => {
+                        if (e.name !== 'AbortError') console.error('Video play error:', e);
+                      });
+                    }
+                  }
+                  if (thumbnailRef.current) gsap.to(thumbnailRef.current, { opacity: 0, duration: 0.5 });
+                }
+              } else {
+                // Card is moving
+                if (videoPlayingRef.current) {
+                  videoPlayingRef.current = false;
+                  if (videoRef.current) videoRef.current.pause();
+                  if (thumbnailRef.current) gsap.to(thumbnailRef.current, { opacity: 0.6, duration: 0.3 });
+                }
+              }
+            }
           }
         });
       };
@@ -138,21 +195,31 @@ export default function HeroAndExpertise() {
                 />
               </div>
 
-              {/* Back Side: Portfolio Preview */}
-              <div className="absolute inset-0 w-full h-full backface-hidden rotate-y-180 rounded-[2rem] overflow-hidden bg-[#1A1A1A] flex flex-col justify-end p-8 border border-white/10">
-                {/* Simulated Portfolio Images Grid inside the card */}
-                <div className="absolute inset-0 w-full h-full opacity-40 grid grid-cols-2 grid-rows-3 gap-2 p-2">
-                  <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=400&auto=format&fit=crop" className="w-full h-full object-cover rounded-xl" />
-                  <img src="https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?q=80&w=400&auto=format&fit=crop" className="w-full h-full object-cover rounded-xl" />
-                  <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=400&auto=format&fit=crop" className="w-full h-full object-cover rounded-xl" />
-                  <img src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=400&auto=format&fit=crop" className="w-full h-full object-cover rounded-xl" />
-                  <img src="https://images.unsplash.com/photo-1522542550221-31fd19575a2d?q=80&w=400&auto=format&fit=crop" className="w-full h-full object-cover rounded-xl col-span-2" />
-                </div>
+              {/* Back Side: Video & Overlay */}
+              <div className="absolute inset-0 w-full h-full backface-hidden rotate-y-180 rounded-[2rem] overflow-hidden bg-[#1A1A1A] flex flex-col justify-center items-center p-8 border border-white/10">
+                
+                <video
+                  ref={videoRef}
+                  src={bgVideo}
+                  loop
+                  muted
+                  playsInline
+                  className="absolute inset-0 w-full h-full object-cover opacity-60"
+                />
+                
+                <img
+                  ref={thumbnailRef}
+                  src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800&auto=format&fit=crop"
+                  className="absolute inset-0 w-full h-full object-cover opacity-60"
+                  alt="Code Thumbnail"
+                />
+                
+                <div className="absolute inset-0 bg-black/40" />
                 
                 {/* Name & Title Overlay */}
-                <div className="relative z-10 drop-shadow-md">
-                  <h3 className="text-3xl font-bold text-white tracking-tight leading-none mb-1">RAGAN<br/>PATEL</h3>
-                  <p className="text-sm font-light text-white/80">Designer & Developer</p>
+                <div className="relative z-10 drop-shadow-md text-center">
+                  <h3 className="text-4xl font-bold text-white tracking-tight leading-none mb-2">RAGAN<br/>PATEL</h3>
+                  <p className="text-[15px] font-light text-white/80">Designer & Developer</p>
                 </div>
               </div>
             </div>
@@ -172,26 +239,34 @@ export default function HeroAndExpertise() {
       </section>
 
       {/* 2. EXPERTISE SECTION */}
-      <section id="expertise" className="luxury-spacing relative z-10 bg-white">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-16 items-center max-w-[1200px] mx-auto">
+      <section id="expertise" className="relative z-10 bg-[#F5F5F5] min-h-[200vh]">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-start max-w-[1400px] mx-auto relative px-4 lg:px-12">
           
-          {/* Left Content Card */}
-          <div className="do-best-element bg-white p-8 md:p-12 rounded-[2.5rem] shadow-[0_10px_40px_rgba(0,0,0,0.03)] border border-black/5 h-[400px] sm:h-[480px] lg:h-[520px] flex flex-col justify-center">
-             <span className="text-ink-500 text-sm font-medium tracking-wide mb-2 block" style={{ fontFamily: 'system-ui, sans-serif' }}>Top performing</span>
-             <h3 className="text-4xl md:text-5xl font-medium tracking-tight mb-8">01. Web Design</h3>
-             <p className="text-ink-500 mb-8 font-light leading-relaxed text-sm">
-                I design modern websites that are responsive, mobile-friendly, and SEO-ready. Every site is built for usability, speed, and premium design aesthetics.
-             </p>
-             <ul className="text-ink-500 font-light text-[13px] space-y-2">
-                <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-gold-400" />Figma</li>
-                <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-gold-400" />React, GSAP & Tailwind</li>
-                <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-gold-400" />Webflow & Framer</li>
-                <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-gold-400" />Experienced with AI builders</li>
-             </ul>
+          {/* Left Content Column - ScrollStack */}
+          <div className="w-full">
+            <ScrollStack useWindowScroll={true} stackPosition="15vh" itemStackDistance={0}>
+              {EXPERTISE_CARDS.map((card, index) => (
+                <ScrollStackItem key={index} itemClassName="bg-white p-8 md:p-12 shadow-[0_10px_40px_rgba(0,0,0,0.04)] border border-black/5 h-[400px] sm:h-[480px] lg:h-[520px] flex flex-col justify-center rounded-[2.5rem]">
+                   <span className="text-ink-500 text-sm font-medium tracking-wide mb-2 block" style={{ fontFamily: 'system-ui, sans-serif' }}>Top performing</span>
+                   <h3 className="text-4xl md:text-5xl font-medium tracking-tight mb-8">{card.title}</h3>
+                   <p className="text-ink-500 mb-8 font-light leading-relaxed text-sm">
+                      {card.description}
+                   </p>
+                   <ul className="text-ink-500 font-light text-[13px] grid grid-cols-2 gap-y-2 gap-x-4">
+                      {card.tools.map((tool, i) => (
+                        <li key={i} className="flex items-center gap-2">
+                          <div className="w-1.5 h-1.5 rounded-full bg-gold-400 shrink-0" />
+                          {tool}
+                        </li>
+                      ))}
+                   </ul>
+                </ScrollStackItem>
+              ))}
+            </ScrollStack>
           </div>
 
-          {/* Right Destination Placeholder */}
-          <div className="do-best-element flex justify-center lg:justify-end shrink-0">
+          {/* Right Destination Placeholder (Sticky) */}
+          <div className="do-best-element flex justify-center lg:justify-end shrink-0 lg:sticky lg:top-[15vh] h-[400px] sm:h-[480px] lg:h-[520px] z-0 pointer-events-none mt-[10vh] lg:mt-0">
             <div 
               ref={expertiseCardPlaceholder} 
               className="w-[280px] h-[400px] sm:w-[320px] sm:h-[480px] lg:w-[340px] lg:h-[520px] invisible" 
