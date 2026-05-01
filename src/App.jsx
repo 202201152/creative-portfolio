@@ -3,8 +3,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 import Navbar from './components/Navbar';
-import Hero from './components/Hero';
-import WhatIDoBest from './components/WhatIDoBest';
+import HeroAndExpertise from './components/HeroAndExpertise';
 import About from './components/About';
 import InteractiveText from './components/InteractiveText';
 import ScrollProgress from './components/ScrollProgress';
@@ -31,8 +30,7 @@ function App() {
       <ScrollProgress />
       
       <main>
-        <Hero />
-        <WhatIDoBest />
+        <HeroAndExpertise />
         <About />
         <InteractiveText />
         <SelectedWork />
