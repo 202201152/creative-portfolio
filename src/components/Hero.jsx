@@ -1,5 +1,7 @@
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
+import ragImage from '../assets/images/Rag.png';
+import PixelBlast from './PixelBlast';
 
 export default function Hero() {
   const containerRef = useRef(null);
@@ -22,40 +24,62 @@ export default function Hero() {
   return (
     <section 
       ref={containerRef} 
-      className="min-h-screen flex flex-col justify-center luxury-spacing relative"
+      className="min-h-screen flex items-center justify-center w-full relative overflow-hidden bg-[#F5F5F5]"
     >
-      <div className="grid grid-cols-1 lg:grid-cols-3 items-center gap-12 lg:gap-8">
+      {/* Background Animation */}
+      <div className="absolute inset-0 z-0 pointer-events-auto">
+        <PixelBlast
+          variant="circle"
+          pixelSize={6}
+          color="#D4AF37"
+          patternScale={3}
+          patternDensity={1.2}
+          pixelSizeJitter={0.5}
+          enableRipples
+          rippleSpeed={0.4}
+          rippleThickness={0.12}
+          rippleIntensityScale={1.5}
+          liquid
+          liquidStrength={0.12}
+          liquidRadius={1.2}
+          liquidWobbleSpeed={5}
+          speed={0.6}
+          edgeFade={0.25}
+          transparent
+        />
+      </div>
+
+      <div className="relative z-10 w-full px-4 lg:px-12 flex flex-col lg:flex-row items-center justify-center max-w-[1600px] mx-auto">
         
-        {/* Left Name */}
-        <div className="hero-element flex justify-center lg:justify-end order-2 lg:order-1">
-          <h1 className="text-6xl md:text-8xl lg:text-9xl font-light tracking-tighter text-ink-900">
-            Ragan
+        {/* Left Name & Info */}
+        <div className="hero-element flex flex-col items-center lg:items-end flex-1 lg:pr-8 xl:pr-16 lg:mb-0 mb-8 order-2 lg:order-1">
+          <p className="text-ink-500 font-light text-sm mb-2 lg:mb-4 text-center lg:text-right w-full">Award Winning Creative Leader</p>
+          <h1 className="text-[15vw] lg:text-[9vw] xl:text-[10vw] font-black tracking-[-0.05em] text-[#1A1A1A] leading-none uppercase m-0 p-0 text-center lg:text-right w-full" style={{ fontFamily: 'system-ui, sans-serif' }}>
+            RAGAN
           </h1>
         </div>
 
         {/* Center Profile Card */}
-        <div className="hero-element flex justify-center order-1 lg:order-2">
-          <div className="w-64 h-80 md:w-80 md:h-[400px] rounded-2xl overflow-hidden bg-black/5 relative group">
-            {/* Placeholder Image - replace with actual portrait */}
+        <div className="hero-element shrink-0 order-1 lg:order-2 z-20 mx-4">
+          <div className="w-[280px] h-[400px] sm:w-[320px] sm:h-[480px] lg:w-[340px] lg:h-[520px] rounded-[2rem] overflow-hidden shadow-2xl relative bg-white border border-white/20">
             <img 
-              src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=800&auto=format&fit=crop" 
+              src={ragImage} 
               alt="Ragan Patel" 
-              className="w-full h-full object-cover grayscale opacity-90 transition-all duration-700 group-hover:grayscale-0 group-hover:scale-105"
+              className="w-full h-full object-cover"
+              onError={(e) => {
+                e.target.src = 'https://images.unsplash.com/photo-1598255555447-3bd9b2165f12?q=80&w=800&auto=format&fit=crop';
+              }}
             />
           </div>
         </div>
 
         {/* Right Name & Info */}
-        <div className="hero-element flex flex-col items-center lg:items-start order-3 lg:order-3">
-          <h1 className="text-6xl md:text-8xl lg:text-9xl font-light tracking-tighter text-ink-900 mb-8 lg:mb-16">
-            Patel
+        <div className="hero-element flex flex-col items-center lg:items-start flex-1 lg:pl-8 xl:pl-16 lg:mt-0 mt-8 order-3 lg:order-3">
+          <p className="text-ink-500 font-light text-sm mb-2 lg:mb-4 text-center lg:text-left w-full">Designer & Founder</p>
+          <h1 className="text-[15vw] lg:text-[9vw] xl:text-[10vw] font-black tracking-[-0.05em] text-[#1A1A1A] leading-none uppercase m-0 p-0 text-center lg:text-left w-full" style={{ fontFamily: 'system-ui, sans-serif' }}>
+            PATEL
           </h1>
-          
-          <div className="text-center lg:text-left space-y-2 text-ink-500 tracking-wide text-sm uppercase font-medium">
-            <p>Full Stack Developer</p>
-            <p>Surat, India</p>
-            <p className="text-gold-500">GMT +5:30</p>
-          </div>
+          <p className="text-ink-500 font-light text-[13px] mt-4 lg:mt-6 tracking-wide text-center lg:text-left w-full">Surat, India - 18:33 GMT+5:30</p>
         </div>
 
       </div>
