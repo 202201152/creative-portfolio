@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import profileImg from '../assets/images/profile.jpg.png';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -104,9 +105,9 @@ export default function Contact() {
         {/* Right Photo Balance */}
         <div className="order-1 lg:order-2 contact-element lg:h-[600px] rounded-3xl overflow-hidden bg-black/5 hidden lg:block">
            <img 
-            src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=800&auto=format&fit=crop" 
+            src={profileImg} 
             alt="Ragan Patel" 
-            className="w-full h-full object-cover grayscale opacity-90"
+            className="w-full h-full object-cover"
           />
         </div>
 
