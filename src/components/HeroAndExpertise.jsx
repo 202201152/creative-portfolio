@@ -4,6 +4,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Star, Send } from 'lucide-react';
 import ragImage from '../assets/images/Rag.png';
 import bgVideo from '../assets/videos/Typing Code - 4K Video - Free Stock Video.mp4';
+import LinePath from './LinePath';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -264,10 +265,10 @@ export default function HeroAndExpertise() {
   }, []);
 
   return (
-    <div ref={containerRef} className="relative w-full overflow-hidden">
+    <div ref={containerRef} className="relative w-full">
       
       {/* 1. HERO SECTION */}
-      <section className="min-h-screen flex items-center justify-center w-full relative bg-[#F5F5F5] z-20">
+      <section className="min-h-screen flex items-center justify-center w-full relative bg-[#F5F5F5] z-50">
 
         <div className="relative z-10 w-full px-4 lg:px-12 flex flex-col lg:flex-row items-center justify-center max-w-[1600px] mx-auto">
           
@@ -288,7 +289,7 @@ export default function HeroAndExpertise() {
             {/* The Flipping Card */}
             <div 
               ref={flippingCard}
-              className="absolute inset-0 w-full h-full transform-style-3d origin-center shadow-2xl rounded-[2rem] z-30"
+              className="absolute inset-0 w-full h-full transform-style-3d origin-center shadow-2xl rounded-[2rem] z-[100]"
             >
               {/* Front Side: Portrait */}
               <div className="absolute inset-0 w-full h-full backface-hidden rounded-[2rem] overflow-hidden bg-white border border-white/20">
@@ -390,11 +391,12 @@ export default function HeroAndExpertise() {
       </section>
 
       {/* 3. ABOUT SECTION */}
-      <section id="about" className="relative z-10 bg-white">
+      <section id="about" className="relative bg-white">
+        <LinePath />
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-start max-w-[1400px] mx-auto px-4 lg:px-12 py-32">
           
           {/* Left Text Content */}
-          <div className="order-2 lg:order-1">
+          <div className="order-2 lg:order-1 relative z-30">
             <h2 className="about-element text-5xl md:text-6xl font-medium tracking-tight mb-4 leading-tight text-ink-900">
               <span className="text-gold-500">Creative</span> at the Core
             </h2>

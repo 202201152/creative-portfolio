@@ -33,38 +33,40 @@ export default function SelectedWork() {
   }, []);
 
   return (
-    <section ref={sectionRef} id="portfolio" className="luxury-spacing bg-white">
-      <div className="mb-16 md:mb-24 flex flex-col md:flex-row md:items-end justify-between gap-6">
-        <div>
-          <h2 className="text-4xl md:text-5xl font-light tracking-tight mb-4">Selected Work</h2>
-          <p className="text-ink-500 max-w-md font-light">A curated collection of projects combining form and function.</p>
-        </div>
-        <a href="#" className="text-sm font-medium uppercase tracking-widest text-gold-500 hover:text-gold-600 transition-colors">
-          View All Work
-        </a>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-10">
-        {works.map((work) => (
-          <a key={work.id} href="#" className="work-card block group">
-            <div className="aspect-square w-full rounded-2xl overflow-hidden relative bg-black/5 mb-6">
-              <img 
-                src={work.image} 
-                alt={work.title} 
-                className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
-              />
-              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-500 flex items-center justify-center">
-                <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-500 text-white font-medium tracking-wider uppercase text-sm border border-white/30 px-6 py-3 rounded-full backdrop-blur-sm">
-                  View Project
-                </span>
-              </div>
-            </div>
-            <div>
-              <h3 className="text-2xl font-medium mb-1">{work.title}</h3>
-              <p className="text-ink-500 font-light text-sm">{work.category}</p>
-            </div>
+    <section ref={sectionRef} id="portfolio" className="luxury-spacing bg-white relative">
+      <div className="relative z-50">
+        <div className="mb-16 md:mb-24 flex flex-col md:flex-row md:items-end justify-between gap-6">
+          <div>
+            <h2 className="text-4xl md:text-5xl font-light tracking-tight mb-4">Selected Work</h2>
+            <p className="text-ink-500 max-w-md font-light">A curated collection of projects combining form and function.</p>
+          </div>
+          <a href="#" className="text-sm font-medium uppercase tracking-widest text-gold-500 hover:text-gold-600 transition-colors">
+            View All Work
           </a>
-        ))}
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-10">
+          {works.map((work) => (
+            <a key={work.id} href="#" className="work-card block group">
+              <div className="aspect-square w-full rounded-2xl overflow-hidden relative bg-black/5 mb-6">
+                <img 
+                  src={work.image} 
+                  alt={work.title} 
+                  className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-500 flex items-center justify-center">
+                  <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-500 text-white font-medium tracking-wider uppercase text-sm border border-white/30 px-6 py-3 rounded-full backdrop-blur-sm">
+                    View Project
+                  </span>
+                </div>
+              </div>
+              <div>
+                <h3 className="text-2xl font-medium mb-1">{work.title}</h3>
+                <p className="text-ink-500 font-light text-sm">{work.category}</p>
+              </div>
+            </a>
+          ))}
+        </div>
       </div>
     </section>
   );

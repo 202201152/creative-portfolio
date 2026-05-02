@@ -9,13 +9,22 @@ export default function InteractiveText() {
   const textRef = useRef(null);
 
   useEffect(() => {
-    // Split text into words for animation (simple implementation)
-    const words = textRef.current.innerText.split(' ');
+    if (!textRef.current) return;
+    
+    // Split text into words while preserving spaces for natural line breaks
+    const text = textRef.current.innerText;
+    const words = text.split(/(\s+)/);
     textRef.current.innerHTML = '';
     
     words.forEach((word) => {
+      if (word.trim() === '') {
+        textRef.current.appendChild(document.createTextNode(word));
+        return;
+      }
       const span = document.createElement('span');
-      span.className = 'inline-block opacity-20 transition-opacity duration-300 mr-[0.2em] mb-[0.1em]';
+      // No margin classes needed, natural spacing is preserved
+      span.className = 'inline-block font-medium'; 
+      span.style.color = 'rgba(17, 17, 17, 0.15)'; // Faded ink-900
       span.innerText = word;
       textRef.current.appendChild(span);
     });
@@ -23,14 +32,14 @@ export default function InteractiveText() {
     const spans = textRef.current.children;
 
     gsap.to(spans, {
-      opacity: 1,
-      stagger: 0.1,
-      ease: 'none',
+      color: '#111111', // Solid ink-900
+      stagger: 1, // High stagger ratio makes it go strictly word by word
+      ease: 'none', // Linear transition per word
       scrollTrigger: {
         trigger: containerRef.current,
-        start: 'top 60%',
-        end: 'bottom 60%',
-        scrub: true,
+        start: 'top 80%',
+        end: 'center 40%',
+        scrub: 0.5, // Slight smoothing
       }
     });
 
