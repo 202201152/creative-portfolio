@@ -4,7 +4,6 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 import Navbar from './components/Navbar';
 import HeroAndExpertise from './components/HeroAndExpertise';
-import About from './components/About';
 import InteractiveText from './components/InteractiveText';
 import ScrollProgress from './components/ScrollProgress';
 import SelectedWork from './components/SelectedWork';
@@ -31,7 +30,6 @@ function App() {
       
       <main>
         <HeroAndExpertise />
-        <About />
         <InteractiveText />
         <SelectedWork />
         <Contact />
