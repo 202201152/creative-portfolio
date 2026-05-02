@@ -25,7 +25,7 @@ export default function Footer() {
   }, []);
 
   return (
-    <footer ref={footerRef} className="pt-24 pb-32 md:pb-40 px-6 md:px-12 lg:px-24 bg-paper-50 overflow-hidden">
+    <footer ref={footerRef} className="relative z-40 pt-24 pb-32 md:pb-40 px-6 md:px-12 lg:px-24 bg-paper-50 overflow-hidden">
       <div className="flex flex-col items-center justify-center text-center space-y-12">
         
         <div className="overflow-hidden w-full">
@@ -34,14 +34,14 @@ export default function Footer() {
           </h2>
         </div>
 
-        <div className="flex flex-wrap items-center justify-center gap-4 text-sm md:text-base font-medium tracking-widest uppercase text-ink-500">
-          <a href="mailto:hello@raganpatel.com" className="hover:text-gold-500 transition-colors">Email</a>
+        <div className="relative z-10 flex flex-wrap items-center justify-center gap-4 text-sm md:text-base font-medium tracking-widest uppercase text-ink-500">
+          <a href="mailto:raganpatel648@gmail.com" className="hover:text-gold-500 transition-colors">Email</a>
           <span className="text-black/20">•</span>
-          <a href="tel:+910000000000" className="hover:text-gold-500 transition-colors">Phone</a>
+          <a href="tel:+919106052649" className="hover:text-gold-500 transition-colors">Phone</a>
           <span className="text-black/20">•</span>
-          <a href="#" className="hover:text-gold-500 transition-colors">LinkedIn</a>
+          <a href="https://www.linkedin.com/in/ragan-patel-833252285/" target="_blank" rel="noopener noreferrer" className="hover:text-gold-500 transition-colors">LinkedIn</a>
           <span className="text-black/20">•</span>
-          <a href="#" className="hover:text-gold-500 transition-colors">GitHub</a>
+          <a href="https://github.com/202201152" target="_blank" rel="noopener noreferrer" className="hover:text-gold-500 transition-colors">GitHub</a>
         </div>
         
       </div>

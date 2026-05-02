@@ -5,10 +5,9 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 gsap.registerPlugin(ScrollTrigger);
 
 const works = [
-  { id: 1, title: 'Lumina', category: 'E-Commerce', image: 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=800&auto=format&fit=crop' },
-  { id: 2, title: 'Aura', category: 'Brand Identity', image: 'https://images.unsplash.com/photo-1600607686527-6fb886090705?q=80&w=800&auto=format&fit=crop' },
-  { id: 3, title: 'Vertex', category: 'Web App', image: 'https://images.unsplash.com/photo-1558655146-d09347e92766?q=80&w=800&auto=format&fit=crop' },
-  { id: 4, title: 'Nova', category: 'Portfolio', image: 'https://images.unsplash.com/photo-1618221118493-9cfa1a1c00da?q=80&w=800&auto=format&fit=crop' },
+  { id: 1, title: 'Pagani Utopia', category: 'Automotive / 3D', image: 'https://images.unsplash.com/photo-1614200187524-dc4b892acf16?q=80&w=800&auto=format&fit=crop', link: 'https://pagani-3kaj.vercel.app/' },
+  { id: 2, title: 'iPhone 16 Pro', category: 'Product Showcase', image: 'https://images.unsplash.com/photo-1605236453806-6ff36851218e?q=80&w=800&auto=format&fit=crop', link: 'https://iphone-peach-two.vercel.app/' },
+  { id: 3, title: 'DG Jewelry', category: 'E-Commerce', image: 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?q=80&w=800&auto=format&fit=crop', link: 'https://durga-art-zone-zyhq.vercel.app/' },
 ];
 
 export default function SelectedWork() {
@@ -45,9 +44,9 @@ export default function SelectedWork() {
           </a>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-10">
           {works.map((work) => (
-            <a key={work.id} href="#" className="work-card block group">
+            <a key={work.id} href={work.link} target="_blank" rel="noopener noreferrer" className="work-card block group">
               <div className="aspect-square w-full rounded-2xl overflow-hidden relative bg-black/5 mb-6">
                 <img 
                   src={work.image} 

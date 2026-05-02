@@ -46,7 +46,9 @@ export default function About() {
 
           <div className="about-element flex flex-col sm:flex-row gap-4">
             <a 
-              href="#" 
+              href="https://drive.google.com/drive/folders/1uKFaqoCkcBSW9ziODPkVu7L4qoVei-Hr?usp=drive_link" 
+              target="_blank" 
+              rel="noopener noreferrer"
               className="inline-flex justify-center items-center px-8 py-4 bg-ink-900 text-white rounded-full font-medium hover:bg-gold-500 transition-colors duration-300"
             >
               Download CV
