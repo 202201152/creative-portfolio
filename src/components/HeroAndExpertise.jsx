@@ -2,8 +2,6 @@ import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import ragImage from '../assets/images/Rag.png';
-import PixelBlast from './PixelBlast';
-import ScrollStack, { ScrollStackItem } from './ScrollStack';
 import bgVideo from '../assets/videos/Typing Code - 4K Video - Free Stock Video.mp4';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -74,24 +72,22 @@ export default function HeroAndExpertise() {
 
         // Kill existing triggers attached to this animation to avoid duplicates on resize
         ScrollTrigger.getAll().forEach(t => {
-          if (t.vars.id === 'flipTrigger') t.kill();
+          if (t.vars.id === 'flipTrigger' || t.vars.id === 'stackTrigger') t.kill();
         });
 
-        gsap.to(flippingCard.current, {
-          x: xOffset,
-          y: yOffset,
-          scaleX: scaleX,
-          scaleY: scaleY,
-          rotationY: -180, // Flip backwards
-          ease: "none",
+        const flipScrollDistance = window.innerHeight * 0.85;
+        const pinScrollDistance = 2500;
+
+        const flipTl = gsap.timeline({
           scrollTrigger: {
             id: 'flipTrigger',
             trigger: expertiseCardPlaceholder.current,
-            start: "top bottom", // Animation starts when the destination enters the bottom of the screen
-            end: "top 15vh", // Animation finishes exactly when the destination hits its sticky point
+            start: "top bottom",
+            end: `+=${flipScrollDistance + pinScrollDistance}`,
             scrub: true,
             onUpdate: (self) => {
-              if (self.progress === 1) {
+              const flipRatio = flipScrollDistance / (flipScrollDistance + pinScrollDistance);
+              if (self.progress >= flipRatio - 0.001) {
                 // Card has settled
                 if (!videoPlayingRef.current) {
                   videoPlayingRef.current = true;
@@ -116,6 +112,68 @@ export default function HeroAndExpertise() {
             }
           }
         });
+
+        flipTl.to(flippingCard.current, {
+          x: xOffset,
+          y: yOffset,
+          scaleX: scaleX,
+          scaleY: scaleY,
+          rotationY: -180, // Flip backwards
+          ease: "none",
+          duration: flipScrollDistance
+        });
+
+        flipTl.to(flippingCard.current, {
+          y: yOffset + pinScrollDistance,
+          ease: "none",
+          duration: pinScrollDistance
+        });
+
+        // --- NATIVE GSAP STACK ANIMATION ---
+        const stackCards = gsap.utils.toArray('.expertise-card');
+        if (stackCards.length > 0) {
+          gsap.set(stackCards, { clearProps: "all" });
+          
+          // Cards 2-5 start off-screen
+          gsap.set(stackCards.slice(1), { y: "150vh" });
+
+          const stackTl = gsap.timeline({
+            scrollTrigger: {
+              id: 'stackTrigger',
+              trigger: ".cards-container",
+              start: "top 15vh",
+              end: "+=2500", // Amount of scrolling to complete the stack
+              scrub: 1,
+              pin: true,
+              anticipatePin: 1
+            }
+          });
+
+          stackCards.forEach((card, i) => {
+            if (i === 0) return;
+            
+            // New card slides up and covers
+            stackTl.to(card, {
+              y: 0,
+              duration: 1,
+              ease: "power2.inOut"
+            }, `stage${i}`);
+
+            // Previous cards scale down and dim progressively
+            for (let j = 0; j < i; j++) {
+              const depth = i - j;
+              const targetScale = 1 - (depth * 0.05); // Shrink 5% per layer
+              const targetY = -(depth * 20); // Move up 20px per layer
+
+              stackTl.to(stackCards[j], {
+                scale: targetScale,
+                y: targetY,
+                duration: 1,
+                ease: "power2.inOut"
+              }, `stage${i}`);
+            }
+          });
+        }
       };
 
       // Run immediately
@@ -139,28 +197,6 @@ export default function HeroAndExpertise() {
       
       {/* 1. HERO SECTION */}
       <section className="min-h-screen flex items-center justify-center w-full relative bg-[#F5F5F5] z-20">
-        {/* Background Animation */}
-        <div className="absolute inset-0 z-0 pointer-events-auto">
-          <PixelBlast
-            variant="circle"
-            pixelSize={6}
-            color="#D4AF37"
-            patternScale={3}
-            patternDensity={1.2}
-            pixelSizeJitter={0.5}
-            enableRipples
-            rippleSpeed={0.4}
-            rippleThickness={0.12}
-            rippleIntensityScale={1.5}
-            liquid
-            liquidStrength={0.12}
-            liquidRadius={1.2}
-            liquidWobbleSpeed={5}
-            speed={0.6}
-            edgeFade={0.25}
-            transparent
-          />
-        </div>
 
         <div className="relative z-10 w-full px-4 lg:px-12 flex flex-col lg:flex-row items-center justify-center max-w-[1600px] mx-auto">
           
@@ -240,13 +276,17 @@ export default function HeroAndExpertise() {
 
       {/* 2. EXPERTISE SECTION */}
       <section id="expertise" className="relative z-10 bg-[#F5F5F5] min-h-[200vh]">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-start max-w-[1400px] mx-auto relative px-4 lg:px-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 max-w-[1400px] mx-auto relative px-4 lg:px-12">
           
-          {/* Left Content Column - ScrollStack */}
+          {/* Left Content Column - Native GSAP Stack */}
           <div className="w-full">
-            <ScrollStack useWindowScroll={true} stackPosition="15vh" itemStackDistance={0}>
+            <div className="cards-container relative w-full h-[400px] sm:h-[480px] lg:h-[520px]">
               {EXPERTISE_CARDS.map((card, index) => (
-                <ScrollStackItem key={index} itemClassName="bg-white p-8 md:p-12 shadow-[0_10px_40px_rgba(0,0,0,0.04)] border border-black/5 h-[400px] sm:h-[480px] lg:h-[520px] flex flex-col justify-center rounded-[2.5rem]">
+                <div 
+                  key={index} 
+                  className="expertise-card absolute top-0 left-0 w-full h-full bg-white p-8 md:p-12 shadow-[0_10px_40px_rgba(0,0,0,0.04)] border border-black/5 flex flex-col justify-center rounded-[2.5rem] will-change-transform"
+                  style={{ zIndex: index + 1 }}
+                >
                    <span className="text-ink-500 text-sm font-medium tracking-wide mb-2 block" style={{ fontFamily: 'system-ui, sans-serif' }}>Top performing</span>
                    <h3 className="text-4xl md:text-5xl font-medium tracking-tight mb-8">{card.title}</h3>
                    <p className="text-ink-500 mb-8 font-light leading-relaxed text-sm">
@@ -260,17 +300,19 @@ export default function HeroAndExpertise() {
                         </li>
                       ))}
                    </ul>
-                </ScrollStackItem>
+                </div>
               ))}
-            </ScrollStack>
+            </div>
           </div>
 
           {/* Right Destination Placeholder (Sticky) */}
-          <div className="do-best-element flex justify-center lg:justify-end shrink-0 lg:sticky lg:top-[15vh] h-[400px] sm:h-[480px] lg:h-[520px] z-0 pointer-events-none mt-[10vh] lg:mt-0">
-            <div 
-              ref={expertiseCardPlaceholder} 
-              className="w-[280px] h-[400px] sm:w-[320px] sm:h-[480px] lg:w-[340px] lg:h-[520px] invisible" 
-            />
+          <div className="w-full h-full relative">
+            <div className="do-best-element flex justify-center lg:justify-end shrink-0 lg:sticky lg:top-[15vh] h-[400px] sm:h-[480px] lg:h-[520px] z-0 pointer-events-none mt-[10vh] lg:mt-0">
+              <div 
+                ref={expertiseCardPlaceholder} 
+                className="w-[280px] h-[400px] sm:w-[320px] sm:h-[480px] lg:w-[340px] lg:h-[520px] invisible" 
+              />
+            </div>
           </div>
 
         </div>

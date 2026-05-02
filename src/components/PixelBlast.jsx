@@ -343,7 +343,6 @@ const PixelBlast = ({
       t.material.dispose();
       t.composer?.dispose();
       t.renderer.dispose();
-      t.renderer.forceContextLoss();
       if (t.renderer.domElement && t.renderer.domElement.parentElement) {
         t.renderer.domElement.parentElement.removeChild(t.renderer.domElement);
       }
@@ -375,7 +374,6 @@ const PixelBlast = ({
         t.material.dispose();
         t.composer?.dispose();
         t.renderer.dispose();
-        t.renderer.forceContextLoss();
         if (t.renderer.domElement.parentElement === container) container.removeChild(t.renderer.domElement);
         threeRef.current = null;
       }
@@ -386,7 +384,7 @@ const PixelBlast = ({
           canvas,
           antialias,
           alpha: true,
-          powerPreference: 'high-performance'
+          powerPreference: 'default'
         });
       } catch (e) {
         console.error('Failed to create WebGLRenderer', e);
