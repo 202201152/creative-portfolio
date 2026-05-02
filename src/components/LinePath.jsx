@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -46,7 +46,7 @@ export default function LinePath({ className = '' }) {
         strokeDashoffset: startOffset, // Pre-drawn 40%
       });
 
-      const tl = gsap.to(path, {
+      gsap.to(path, {
         strokeDashoffset: 0,
         ease: "none",
         scrollTrigger: {
